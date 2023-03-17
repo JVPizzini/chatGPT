@@ -52,7 +52,7 @@ export function Details() {
 
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
 
-  function handleFetchTags() {
+  async function handleFetchTags() {
     setIsLoading(true);
     const prompt = `
       Generate keywords in Portuguese for a post about ${description.trim()}.       
@@ -60,7 +60,7 @@ export function Details() {
       Return each item separated by a comma, in lowercase, and without a line break.
     `;
 
-    fetch(
+    const response = await fetch(
       "https://api.openai.com/v1/engines/text-davinci-003-playground/completions",
       {
         method: "POST",
@@ -77,14 +77,13 @@ export function Details() {
           presence_penalty: 0,
         }),
       }
-    )
-      .then((response) => response.json())
-      .then(
-        (data) => saveTags(data.error.message)
-        /* saveTags(data.choices[0].text ) */
-      )
+    );
+    const data = response.json();
+    data
+      // .then((response) => console.log(response.json()))
+      .then((data) => saveTags(data.choices[0].text))
       .catch((err) =>
-        Alert.alert("Erro", `Não foi possível buscar as tags. Erro =>${err}`) 
+        Alert.alert("Erro", `Não foi possível buscar as tags. Erro =>${err}`)
       )
       .finally(() => setIsLoading(false));
   }
