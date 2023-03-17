@@ -84,7 +84,7 @@ export function Details() {
         /* saveTags(data.choices[0].text ) */
       )
       .catch((err) =>
-        Alert.alert("Erro", `Não foi possível buscar as tags. Erro =>${err}`)
+        Alert.alert("Erro", `Não foi possível buscar as tags. Erro =>${err}`) 
       )
       .finally(() => setIsLoading(false));
   }
